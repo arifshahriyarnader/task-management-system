@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 
 import { ApiError } from "../../shared/utils/ApiError";
 import { signToken } from "../../shared/utils/token";
-import { LoginInput, LoginResponse, UserRow } from "./auth.types";
+import { LoginInput, LoginResponse, MeResponse, UserRow } from "./auth.types";
 import { databasePool } from "../../shared/database";
 
 export const loginService = async (
@@ -40,4 +40,20 @@ export const loginService = async (
       role: user.role,
     },
   };
+};
+
+export const getMeService = async (userId: string): Promise<MeResponse> => {
+  const result = await databasePool.query<MeResponse>(
+    `SELECT id, name, email, role, created_at
+     FROM users
+     WHERE id = $1`,
+    [userId]
+  );
+
+  const user = result.rows[0];
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return user;
 };
