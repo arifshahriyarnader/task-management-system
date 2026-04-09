@@ -12,7 +12,7 @@ export const signToken = (payload: TokenPayload): string => {
   if (!secret) throw new ApiError(500, 'JWT secret is not configured');
 
   const options: SignOptions = {
-    expiresIn: (process.env.JWT_EXPIRES_IN as SignOptions['expiresIn']) ?? '30m',
+    expiresIn: (process.env.JWT_EXPIRES_IN as SignOptions['expiresIn']) ?? '1h',
   };
 
   return jwt.sign(payload, secret, options);
