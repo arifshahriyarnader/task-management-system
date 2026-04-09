@@ -1,3 +1,4 @@
+import { createAuditLogService } from "../audit/audit.service";
 import { databasePool } from "../../shared/database";
 import { ApiError } from "../../shared/utils/ApiError";
 import {
@@ -8,7 +9,6 @@ import {
   UpdateTaskStatusInput,
   GetTasksResponse,
 } from "./tasks.types";
-import { createAuditLogService } from "../audit/audit.service";
 
 const getTaskById = async (id: string): Promise<TaskWithUsers> => {
   const result = await databasePool.query<TaskWithUsers>(
