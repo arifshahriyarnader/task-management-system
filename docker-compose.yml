@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15
+    container_name: task-management-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin1234
+      POSTGRES_DB: task-management-system
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/src/shared/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  
+  server:
+    build: ./server
+    container_name: task-management-server
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PORT: 5001
+      DATABASE_URL: postgres://postgres:admin1234@db:5432/task-management-system
+      JWT_SECRET: my_jwt_secret_key
+      JWT_EXPIRES_IN: 1h
+    ports:
+      - "5001:5001"
+
+volumes:
+  postgres_data:
