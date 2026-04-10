@@ -206,10 +206,76 @@ User 2 → user2@taskapp.com  / User@123
 ...
 User 10 → user10@taskapp.com / User@123
 ```
+---
+
+## 🐳 Docker Setup (Recommended)
+
+The easiest way to run the project. No manual database setup needed — tables and users are seeded automatically.
+
+### Prerequisites
+- Docker Desktop installed and running
+
+### Run with Docker
+
+```bash
+# 1. Clone the repo
+git clone git@github.com:arifshahriyarnader/task-management-system.git
+cd task-management-system
+
+# 2. Start everything
+docker compose up -d
+
+# 3. Check logs
+docker compose logs -f
+```
+
+You should see:
+
+```
+task-management-db      | database system is ready to accept connections
+task-management-server  | Server is running on port 5001
+task-management-server  | Database connected successfully
+```
+
+### What Docker does automatically
+
+```
+docker compose up
+  └── starts PostgreSQL container
+        └── runs init.sql automatically
+              ├── creates users table
+              ├── creates tasks table
+              ├── creates audit_logs table
+              ├── inserts 1 admin user
+              └── inserts 10 normal users
+  └── starts backend server
+        └── connects to PostgreSQL
+              └── API ready at http://localhost:5001
+```
+
+### Docker commands
+
+```bash
+# Start in background
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop containers (keeps DB data)
+docker compose down
+
+# Stop and delete DB data (fresh start)
+docker compose down -v
+
+# Rebuild after code changes
+docker compose up --build -d
+```
+
 
 ---
 
-## Setup & Installation
+## Local Setup (Without Docker)
 
 ### Prerequisites
 - Node.js 18+
